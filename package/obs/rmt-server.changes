@@ -5,6 +5,7 @@ Tue Jun 29 12:41:54 UTC 2021 - Felix Schnizlein <fschnizlein@suse.com>
 - Add release_stage to all api endpoints to allow external programm determine
   product stage (bsc#1176628)
 - Update translations
+- additional debug output for mirroring subcommand with '--debug' flag
 
 -------------------------------------------------------------------
 Fri Jun 4 11:10:11 UTC 2021 - Natnael Getahun <natnael.getahun@suse.com>

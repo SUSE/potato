@@ -163,6 +163,7 @@ class RMT::Downloader
     make_file_dir(file.local_path)
     FileUtils.cp(file.cache_path, file.local_path, preserve: true) unless (file.cache_path == file.local_path)
     @logger.info("→ #{File.basename(file.local_path)}")
+    @logger.debug("(cached mtime matches server last modified: #{file.cache_timestamp})")
   end
 
   def finalize_download(request, file)
@@ -189,6 +190,7 @@ class RMT::Downloader
     end
 
     @logger.info("↓ #{File.basename(file.local_path)}")
+    @logger.debug("(new mtime: #{File.mtime(file.local_path).utc})")
   rescue StandardError => e
     request.download_path.unlink
     raise e

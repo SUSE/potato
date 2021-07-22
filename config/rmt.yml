@@ -36,6 +36,10 @@ http_client:
   proxy_user:
   proxy_password:
 
+log_level:
+  rails: info
+  cli: info
+
 web_server:
   min_threads: 5
   max_threads: 5

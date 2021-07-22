@@ -10,7 +10,7 @@ networks:
 
 services:
   db:
-    image: mariadb:10.2
+    image: registry.scc.suse.de/mariadb:10.2
     restart: always
     volumes:
       - db_storage:/var/lib/mysql

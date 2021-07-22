@@ -78,10 +78,6 @@ class RMT::CLI::Mirror < RMT::CLI::Base
 
   protected
 
-  def logger
-    @logger ||= RMT::Logger.new($stdout)
-  end
-
   def mirror
     @mirror ||= RMT::Mirror.new(logger: logger, mirror_src: RMT::Config.mirror_src_files?)
   end

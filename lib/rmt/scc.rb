@@ -8,7 +8,8 @@ class RMT::SCC
 
   def initialize(options = {})
     @logger = RMT::Logger.new(STDOUT)
-    @logger.level = (options[:debug]) ? Logger::DEBUG : Logger::INFO
+    debug = options[:debug] || Settings&.log_level&.cli == 'debug'
+    @logger.level = debug ? Logger::DEBUG : Logger::INFO
   end
 
   def sync

@@ -32,8 +32,8 @@ class RMT::GPG
     out = `#{cmd}`
 
     if $CHILD_STATUS.exitstatus != 0
-      @logger.debug "GPG command: #{cmd}"
-      @logger.debug "GPG output: #{out}"
+      @logger.warn "GPG command: #{cmd}"
+      @logger.warn "GPG output: #{out}"
       raise RMT::GPG::Exception.new(_('GPG key import failed'))
     end
   end
@@ -43,8 +43,8 @@ class RMT::GPG
     out = `#{cmd}`
 
     if $CHILD_STATUS.exitstatus != 0
-      @logger.debug "GPG command: #{cmd}"
-      @logger.debug "GPG output: #{out}"
+      @logger.warn "GPG command: #{cmd}"
+      @logger.warn "GPG output: #{out}"
       raise RMT::GPG::Exception.new(_('GPG signature verification failed'))
     end
   end

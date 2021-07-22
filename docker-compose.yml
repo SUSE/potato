@@ -30,7 +30,7 @@ services:
     command: /bin/bash -c 'bundle.ruby2.5 exec rails db:migrate && bundle.ruby2.5 exec rails s -b rmt'
 
   nginx:
-    image: nginx
+    image: nginx:1.14
     volumes:
       - ./public:/var/www/
       - ./nginx/default.conf:/tmp/default.template
