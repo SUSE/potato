@@ -151,16 +151,24 @@ install -m 444 package/files/systemd/rmt-server-systems-scc-sync.service %{build
 install -m 444 package/files/systemd/rmt-server.service %{buildroot}%{_unitdir}
 install -m 444 package/files/systemd/rmt-server.target %{buildroot}%{_unitdir}
 install -m 444 package/files/systemd/rmt-server-migration.service %{buildroot}%{_unitdir}
+
 install -m 444 engines/registration_sharing/package/rmt-server-regsharing.service %{buildroot}%{_unitdir}
 install -m 444 engines/registration_sharing/package/rmt-server-regsharing.timer %{buildroot}%{_unitdir}
+install -m 444 engines/registration_sharing/package/rmt-server-trim-cache.service %{buildroot}%{_unitdir}
+install -m 444 engines/registration_sharing/package/rmt-server-trim-cache.timer %{buildroot}%{_unitdir}
 
 mkdir -p %{buildroot}%{_sbindir}
 ln -fs %{_sbindir}/service %{buildroot}%{_sbindir}/rcrmt-server
 ln -fs %{_sbindir}/service %{buildroot}%{_sbindir}/rcrmt-server-migration
 ln -fs %{_sbindir}/service %{buildroot}%{_sbindir}/rcrmt-server-mirror
 ln -fs %{_sbindir}/service %{buildroot}%{_sbindir}/rcrmt-server-sync
-ln -fs %{_sbindir}/service %{buildroot}%{_sbindir}/rcrmt-server-regsharing
 ln -fs %{_sbindir}/service %{buildroot}%{_sbindir}/rcrmt-server-systems-scc-sync
+
+ln -fs %{_sbindir}/service %{buildroot}%{_sbindir}/rcrmt-server-regsharing
+ln -fs %{_sbindir}/service %{buildroot}%{_sbindir}/rcrmt-server-trim-cache
+
+ln -fs %{_sbindir}/service %{buildroot}%{_sbindir}/rcrmt-server-regsharing
+ln -fs %{_sbindir}/service %{buildroot}%{_sbindir}/rcrmt-server-trim-cache
 
 mkdir -p %{buildroot}%{_sysconfdir}
 mv %{_builddir}/rmt.conf %{buildroot}%{_sysconfdir}/rmt.conf
@@ -281,8 +289,11 @@ chrpath -d %{buildroot}%{lib_dir}/vendor/bundle/ruby/*/extensions/*/*/mysql2-*/m
 %config(noreplace) %{_sysconfdir}/nginx/rmt-auth.d/auth-location.conf
 
 %{_sbindir}/rcrmt-server-regsharing
+%{_sbindir}/rcrmt-server-trim-cache
 %{_unitdir}/rmt-server-regsharing.service
 %{_unitdir}/rmt-server-regsharing.timer
+%{_unitdir}/rmt-server-trim-cache.service
+%{_unitdir}/rmt-server-trim-cache.timer
 
 %pre
 getent group %{rmt_group} >/dev/null || %{_sbindir}/groupadd -r %{rmt_group}
@@ -322,16 +333,16 @@ fi
 /usr/bin/systemctl reload nginx.service
 
 %pre pubcloud
-%service_add_pre rmt-server-regsharing.service
+%service_add_pre rmt-server-regsharing.service rmt-server-trim-cache.service
 
 %post pubcloud
-%service_add_post rmt-server-regsharing.service
+%service_add_post rmt-server-regsharing.service rmt-server-trim-cache.service
 
 %preun pubcloud
-%service_del_preun rmt-server-regsharing.service
+%service_del_preun rmt-server-regsharing.service rmt-server-trim-cache.service
 
 %postun pubcloud
-%service_del_postun rmt-server-regsharing.service
+%service_del_postun rmt-server-regsharing.service rmt-server-trim-cache.service
 
 %posttrans pubcloud
 /usr/bin/systemctl try-restart rmt-server.service
