@@ -129,8 +129,6 @@ mv vendor %{buildroot}%{lib_dir}
 
 cp -ar . %{buildroot}%{app_dir}
 ln -s %{data_dir}/tmp %{buildroot}%{app_dir}/tmp
-ln -s %{data_dir}/public/repo %{buildroot}%{app_dir}/public/repo
-ln -s %{data_dir}/public/suma %{buildroot}%{app_dir}/public/suma
 mkdir -p %{buildroot}%{_bindir}
 ln -s %{app_dir}/bin/rmt-cli %{buildroot}%{_bindir}
 ln -s %{app_dir}/bin/rmt-data-import %{buildroot}%{_bindir}/rmt-data-import
@@ -310,6 +308,14 @@ if [ $1 -eq 2 ]; then
   if [ -f %{app_dir}/config/system_uuid ]; then
     mv %{app_dir}/config/system_uuid /var/lib/rmt/system_uuid
   fi
+fi
+
+if [ ! -e %{_datadir}/rmt/public/repo ]; then
+ ln -ns %{_sharedstatedir}/rmt/public/repo %{_datadir}/rmt/public/repo
+fi
+
+if [ ! -e %{_datadir}/rmt/public/suma ]; then
+ ln -ns %{_sharedstatedir}/rmt/public/suma %{_datadir}/rmt/public/suma
 fi
 
 %preun

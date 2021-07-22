@@ -4,6 +4,8 @@ Tue Jun 29 12:41:54 UTC 2021 - Felix Schnizlein <fschnizlein@suse.com>
 - Version 2.6.11
 - Add release_stage to all api endpoints to allow external programm determine
   product stage (bsc#1176628)
+- Fix: Don't create suma and repo symlinks at install stage, instead
+  only link them at the post stage if they don't exist (bsc#1188043)
 - Update translations
 - additional debug output for mirroring subcommand with '--debug' flag
 
