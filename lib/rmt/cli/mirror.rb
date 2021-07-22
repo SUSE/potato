@@ -1,6 +1,11 @@
 class RMT::CLI::Mirror < RMT::CLI::Base
   class_option :do_not_raise_unpublished, desc: _('Do not fail the command if product is in alpha or beta stage'), type: :boolean, required: false
 
+  class_option :ignore_gpg_checks, desc: _(
+    'Do not fail the command if repositories/products gpg signature ' \
+    'verification failed'
+  ), type: :boolean, required: false
+
   desc 'all', _('Mirror all enabled repositories')
   def all
     RMT::Lockfile.lock('mirror') do
@@ -134,7 +139,8 @@ class RMT::CLI::Mirror < RMT::CLI::Base
         repository_url: repo.external_url,
         local_path: Repository.make_local_path(repo.external_url),
         auth_token: repo.auth_token,
-        repo_name: repo.name
+        repo_name: repo.name,
+        do_not_raise: options[:ignore_gpg_checks]
       )
       repo.refresh_timestamp!
     rescue RMT::Mirror::Exception => e

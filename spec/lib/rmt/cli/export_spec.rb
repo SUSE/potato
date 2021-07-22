@@ -116,12 +116,14 @@ describe RMT::CLI::Export, :with_fakefs do
         expect(mirror_double).to receive(:mirror).with(
           repository_url: 'http://foo.bar/repo1',
           auth_token: 'foobar',
-          local_path: '/repo1'
+          local_path: '/repo1',
+          do_not_raise: false
         )
 
         expect(mirror_double).to receive(:mirror).with(
           repository_url: 'http://foo.bar/repo2',
           auth_token: '',
+          do_not_raise: false,
           local_path: '/repo2'
         )
 
@@ -146,13 +148,15 @@ describe RMT::CLI::Export, :with_fakefs do
         expect(mirror_double).to receive(:mirror).with(
           repository_url: 'http://foo.bar/repo1',
           auth_token: 'foobar',
-          local_path: '/repo1'
+          local_path: '/repo1',
+          do_not_raise: false
         )
 
         expect(mirror_double).to receive(:mirror).with(
           repository_url: 'http://foo.bar/repo2',
           auth_token: '',
-          local_path: '/repo2'
+          local_path: '/repo2',
+          do_not_raise: false
         )
 
         command
@@ -167,13 +171,15 @@ describe RMT::CLI::Export, :with_fakefs do
           expect(mirror_double).to receive(:mirror).with(
             repository_url: 'http://foo.bar/repo1',
             auth_token: 'foobar',
-            local_path: '/repo1'
+            local_path: '/repo1',
+            do_not_raise: false
           ).and_raise(RMT::Mirror::Exception, 'black mirror')
 
           expect(mirror_double).to receive(:mirror).with(
             repository_url: 'http://foo.bar/repo2',
             auth_token: '',
-            local_path: '/repo2'
+            local_path: '/repo2',
+            do_not_raise: false
           )
 
           expect { command }.to output(/black mirror/).to_stderr

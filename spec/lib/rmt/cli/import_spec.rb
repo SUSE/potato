@@ -69,14 +69,16 @@ describe RMT::CLI::Import, :with_fakefs do
         repository_url: repo1_local_path,
         local_path: Repository.make_local_path(repo1.external_url),
         auth_token: repo1.auth_token,
-        repo_name: repo1.name
+        repo_name: repo1.name,
+        do_not_raise: false
       )
 
       expect(mirror_double).to receive(:mirror).with(
         repository_url: repo2_local_path,
         local_path: Repository.make_local_path(repo2.external_url),
         auth_token: repo2.auth_token,
-        repo_name: repo2.name
+        repo_name: repo2.name,
+        do_not_raise: false
       )
 
       command
@@ -101,14 +103,16 @@ describe RMT::CLI::Import, :with_fakefs do
           repository_url: repo1_local_path,
           local_path: Repository.make_local_path(repo1.external_url),
           auth_token: repo1.auth_token,
-          repo_name: repo1.name
+          repo_name: repo1.name,
+          do_not_raise: false
         )
 
         expect(mirror_double).to receive(:mirror).with(
           repository_url: repo2_local_path,
           local_path: Repository.make_local_path(repo2.external_url),
           auth_token: repo2.auth_token,
-          repo_name: repo2.name
+          repo_name: repo2.name,
+          do_not_raise: false
         )
 
         command
@@ -175,14 +179,16 @@ describe RMT::CLI::Import, :with_fakefs do
           repository_url: repo1_local_path,
           local_path: Repository.make_local_path(repo1.external_url),
           auth_token: repo1.auth_token,
-          repo_name: repo1.name
+          repo_name: repo1.name,
+          do_not_raise: false
         ).and_raise(RMT::Mirror::Exception, 'black mirror')
 
         expect(mirror_double).to receive(:mirror).with(
           repository_url: repo2_local_path,
           local_path: Repository.make_local_path(repo2.external_url),
           auth_token: repo2.auth_token,
-          repo_name: repo2.name
+          repo_name: repo2.name,
+          do_not_raise: false
         )
 
         expect_any_instance_of(RMT::Logger).to receive(:warn).with('black mirror')

@@ -131,7 +131,8 @@ RSpec.describe RMT::CLI::Mirror do
           repository_url: repository.external_url,
           local_path: anything,
           repo_name: anything,
-          auth_token: anything
+          auth_token: anything,
+          do_not_raise: nil
         ) do
           # enable mirroring of the additional repository during mirroring
           additional_repository.mirroring_enabled = true
@@ -142,7 +143,8 @@ RSpec.describe RMT::CLI::Mirror do
           repository_url: additional_repository.external_url,
           local_path: anything,
           repo_name: anything,
-          auth_token: anything
+          auth_token: anything,
+          do_not_raise: nil
         )
 
         expect { command }.to output(/\e\[32mMirroring complete.\e\[0m/).to_stdout
@@ -161,7 +163,8 @@ RSpec.describe RMT::CLI::Mirror do
           repository_url: repository.external_url,
           local_path: anything,
           repo_name: anything,
-          auth_token: anything
+          auth_token: anything,
+          do_not_raise: nil
         ) do
           # enable mirroring of the additional repository during mirroring
           additional_repository.mirroring_enabled = true
@@ -173,7 +176,8 @@ RSpec.describe RMT::CLI::Mirror do
           repository_url: additional_repository.external_url,
           local_path: anything,
           repo_name: anything,
-          auth_token: anything
+          auth_token: anything,
+          do_not_raise: nil
         )
 
         expect { command }
@@ -198,7 +202,8 @@ RSpec.describe RMT::CLI::Mirror do
           repository_url: repository.external_url,
           local_path: anything,
           repo_name: anything,
-          auth_token: anything
+          auth_token: anything,
+          do_not_raise: nil
         )
 
         expect { command }.to output(/\e\[32mMirroring complete.\e\[0m/).to_stdout
@@ -275,7 +280,8 @@ RSpec.describe RMT::CLI::Mirror do
             repository_url: repo.external_url,
             local_path: anything,
             repo_name: anything,
-            auth_token: anything
+            auth_token: anything,
+            do_not_raise: nil
           )
         end
 
@@ -293,7 +299,8 @@ RSpec.describe RMT::CLI::Mirror do
             repository_url: repo.external_url,
             local_path: anything,
             repo_name: anything,
-            auth_token: anything
+            auth_token: anything,
+            do_not_raise: nil
           )
         end
 

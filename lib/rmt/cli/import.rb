@@ -42,7 +42,8 @@ class RMT::CLI::Import < RMT::CLI::Base
             repository_url: repo_url,
             local_path: Repository.make_local_path(repo.external_url),
             auth_token: repo.auth_token,
-            repo_name: repo.name
+            repo_name: repo.name,
+            do_not_raise: false
           )
 
           repo.refresh_timestamp!

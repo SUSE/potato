@@ -198,7 +198,8 @@ RSpec.describe RMT::Mirror do
         {
           repository_url: 'http://localhost/dummy_product/product/',
           local_path: '/dummy_product/product/',
-          auth_token: 'repo_auth_token'
+          auth_token: 'repo_auth_token',
+          do_not_raise: nil
         }
       end
 
@@ -360,6 +361,55 @@ RSpec.describe RMT::Mirror do
             klass.call(*args)
           end
           expect { rmt_mirror.mirror(**mirror_params) }.to raise_error(RMT::Mirror::Exception, 'Error while mirroring data: Failed to download 6 files')
+        end
+      end
+
+      context 'when GPG verification signature fails and silent option is on', vcr: { cassette_name: 'mirroring_product' } do
+        let(:mirror_params) do
+          {
+            repository_url: 'http://localhost/dummy_product/product/',
+            local_path: '/dummy_product/product/',
+            auth_token: 'repo_auth_token',
+            do_not_raise: true
+          }
+        end
+
+        it 'does not raise exception' do
+          allow_any_instance_of(described_class).to receive(:mirror_packages)
+          allow_any_instance_of(RMT::GPG).to(
+            receive(:verify_signature)
+              .and_raise(
+                RMT::GPG::Exception, 'GPG signature verification failed'
+                )
+          )
+          expect { rmt_mirror.mirror(**mirror_params) }.not_to raise_error
+        end
+      end
+
+      context 'when GPG verification signature fails and silent option is off', vcr: { cassette_name: 'mirroring_product' } do
+        let(:mirror_params) do
+          {
+            repository_url: 'http://localhost/dummy_product/product/',
+            local_path: '/dummy_product/product/',
+            auth_token: 'repo_auth_token',
+            do_not_raise: false
+          }
+        end
+
+        it 'raises exception' do
+          allow_any_instance_of(described_class).to receive(:mirror_packages)
+          allow_any_instance_of(RMT::GPG).to(
+            receive(:verify_signature)
+              .and_raise(
+                RMT::GPG::Exception, 'GPG signature verification failed'
+                )
+          )
+          expect { rmt_mirror.mirror(**mirror_params) }.to(
+            raise_error(RMT::Mirror::Exception) do |e|
+              expect(e.message).to eq('Error while mirroring metadata: GPG ' \
+                                      'signature verification failed')
+            end
+          )
         end
       end
     end

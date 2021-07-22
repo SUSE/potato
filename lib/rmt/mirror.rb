@@ -44,7 +44,7 @@ class RMT::Mirror
     raise RMT::Mirror::Exception.new(_('Could not mirror SUSE Manager product tree with error: %{error}') % { error: e.message })
   end
 
-  def mirror(repository_url:, local_path:, auth_token: nil, repo_name: nil)
+  def mirror(repository_url:, local_path:, auth_token: nil, repo_name: nil, do_not_raise: false)
     repository_dir = File.join(mirroring_base_dir, local_path)
 
     logger.info _('Mirroring repository %{repo} to %{dir}') % { repo: repo_name || repository_url, dir: repository_dir }
@@ -56,7 +56,7 @@ class RMT::Mirror
 
     downloader.auth_token = auth_token
     temp_metadata_dir = create_temp_dir
-    metadata_files = mirror_metadata(repository_dir, repository_url, temp_metadata_dir)
+    metadata_files = mirror_metadata(repository_dir, repository_url, temp_metadata_dir, do_not_raise)
     mirror_packages(metadata_files, repository_dir, repository_url)
 
     replace_directory(temp_licenses_dir, repository_dir.chomp('/') + '.license/') if Dir.exist?(temp_licenses_dir)
@@ -83,7 +83,7 @@ class RMT::Mirror
     raise RMT::Mirror::Exception.new(_('Could not create a temporary directory: %{error}') % { error: e.message })
   end
 
-  def mirror_metadata(repository_dir, repository_url, temp_metadata_dir)
+  def mirror_metadata(repository_dir, repository_url, temp_metadata_dir, do_not_raise)
     mirroring_paths = {
       base_url: URI.join(repository_url),
       base_dir: temp_metadata_dir,
@@ -110,6 +110,11 @@ class RMT::Mirror
         logger.info(_('Repository metadata signatures are missing'))
       else
         raise(_('Failed to get repository metadata signatures with HTTP code %{http_code}') % { http_code: e.http_code })
+      end
+    rescue RMT::GPG::Exception => e
+      logger.error "Error while mirroring metadata: #{e.message}"
+      unless do_not_raise && e.message.include?('GPG signature verification failed')
+        raise RMT::Mirror::Exception.new(_(e.message))
       end
     end
 

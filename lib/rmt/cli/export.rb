@@ -48,7 +48,8 @@ class RMT::CLI::Export < RMT::CLI::Base
         mirror.mirror(
           repository_url: repo['url'],
           local_path: Repository.make_local_path(repo['url']),
-          auth_token: repo['auth_token']
+          auth_token: repo['auth_token'],
+          do_not_raise: false
         )
       rescue RMT::Mirror::Exception => e
         warn e.to_s
