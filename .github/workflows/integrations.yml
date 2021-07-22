@@ -13,7 +13,7 @@ jobs:
     strategy:
       max-parallel: 3
       matrix:
-        ruby-version: ['2.5.8', '2.6.6', '2.7.2']
+        ruby-version: ['2.5.8', '2.5.9']
 
     services:
       mysql:
