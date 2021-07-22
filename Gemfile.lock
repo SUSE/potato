@@ -163,7 +163,7 @@ GEM
       concurrent-ruby (~> 1.0)
     json (2.3.1)
     jsonapi-renderer (0.2.2)
-    jwt (2.2.2)
+    jwt (2.2.3)
     kramdown (2.3.1)
       rexml
     kramdown-parser-gfm (1.1.0)
